@@ -1,10 +1,11 @@
-const { useSelector } = require('react-redux');
 import { getTodo } from 'redux/todosSlice';
 import { Grid, GridItem, Text, Todo } from 'components';
+import { useSelector } from 'react-redux';
 
-export const TodoList = () => {
+
+const TodoList = () => {
   const todos = useSelector(getTodo);
-
+console.log(todos);
   return (
     <>
       {todos.length === 0 && (
@@ -21,3 +22,5 @@ export const TodoList = () => {
     </>
   );
 };
+
+export default TodoList;
