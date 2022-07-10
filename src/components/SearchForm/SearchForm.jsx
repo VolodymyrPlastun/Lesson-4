@@ -1,48 +1,43 @@
-import { useState } from 'react';
 import { FiSearch } from 'react-icons/fi';
 import { FormBtn, InputSearch, SearchFormStyled } from './SearchForm.styled';
+import { nanoid } from 'nanoid';
+import { useLocalStorage } from 'hooks';
+import { useDispatch } from 'react-redux';
+import { addTodo } from 'redux/todosSlice';
 
-export const SearchForm = ({onSubmit}) => {
-  const [query, setQuery] = useState('');
-  // state = {
-  //   query: '',
-  // };
+export const SearchForm = () => {
+  const [query, setQuery] = useLocalStorage('query', '');
 
- const handleInput = e => {
-    setQuery(e.target.value);
+  const dispatch = useDispatch();
 
-    // this.setState({
-    //   query: e.currentTarget.value,
-    // });
+  const handleInput = e => {
+    const { value } = e.currentTarget;
+    setQuery(value);
   };
 
- const handleSubmit = e => {
-    // const { query } = this.state;
-
+  const handleSubmit = e => {
     e.preventDefault();
 
-    onSubmit(query);
-setQuery('');
-    // this.setState({
-    //   query: '',
-    // });
+    const todo = { id: nanoid(), text: query };
+    dispatch(addTodo(todo));
+    setQuery('');
   };
 
-    // const { query } = this.state;
+  // const { query } = this.state;
 
-    return (
-      <SearchFormStyled onSubmit={handleSubmit}>
-        <FormBtn type="submit">
-          <FiSearch size="16px" />
-        </FormBtn>
-        <InputSearch
-          onChange={handleInput}
-          placeholder="What do you want to write?"
-          name="search"
-          required
-          value={query}
-          autoFocus
-        />
-      </SearchFormStyled>
-    );
-}
+  return (
+    <SearchFormStyled onSubmit={handleSubmit}>
+      <FormBtn type="submit">
+        <FiSearch size="16px" />
+      </FormBtn>
+      <InputSearch
+        onChange={handleInput}
+        placeholder="What do you want to write?"
+        name="search"
+        required
+        value={query}
+        autoFocus
+      />
+    </SearchFormStyled>
+  );
+};
